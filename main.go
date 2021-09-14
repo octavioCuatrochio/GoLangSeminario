@@ -1,31 +1,31 @@
 package main
 
 import (
-	"fmt"
+	"errors"
 	"strconv"
 )
 
 //go run main.go
 
-func main() {
-	cadena := "TX03ABC"
-	resultado := CrearResult(cadena)
-	fmt.Println(resultado)
-}
-
 type Result struct {
 	Type   string
-	Value  string
 	Length int
+	Value  string
 }
 
-func CrearResult(cosa string) Result {
+func CrearResult(cosa string) (Result, error) {
 
-	tipo := cosa[0:2]
-	largo := cosa[2:4]
-	valor := cosa[4:]
+	if len(cosa) > 5 {
 
-	largoParseado, _ := strconv.ParseInt(largo, 0, 8)
+		tipo := cosa[0:2]
+		largo := cosa[2:4]
+		valor := cosa[4:]
 
-	return Result{tipo, valor, int(largoParseado)}
+		largoParseado, _ := strconv.ParseInt(largo, 0, 8)
+
+		return Result{tipo, int(largoParseado), valor}, nil
+
+	} else {
+		return Result{}, errors.New("cadena incorrecta")
+	}
 }
